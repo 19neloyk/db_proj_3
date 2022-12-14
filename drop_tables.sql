@@ -1,0 +1,10 @@
+drop table if exists student;
+drop table if exists residencehall;
+drop table if exists class;
+drop table if exists classinstance;
+drop table if exists outcome;
+drop table if exists prerequisite;
+drop table if exists staff;
+drop table if exists jobtype;
+drop table if exists studenttoclassinstance;
+drop table if exists librarybooks;
