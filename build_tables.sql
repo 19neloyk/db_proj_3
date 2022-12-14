@@ -54,8 +54,9 @@ create table residencehall (
 );
 
 create table class (
-    classnumber         INT NOT NULL UNIQUE,
-    department          CHAR NOT NULL,
+    classid             INT NOT NULL UNIQUE, /* Arbitrary unique identifier */
+    classnumber         INT NOT NULL,   /* This represents the 320 in "CS320" */       
+    department          CHAR NOT NULL,  /* This represents the "CS" in "CS320" */
     name                CHAR NOT NULL,
     description         CHAR,
     PRIMARY KEY (classnumber)
@@ -63,29 +64,29 @@ create table class (
 
 create table classinstance (
     crn                 INT NOT NULL UNIQUE,
-    classnumber         INT NOT NULL,
+    classid             INT NOT NULL,
     professorid         INT NOT NULL,
     semester            CHAR NOT NULL,
     section             INT NOT NULL,
     location            CHAR NOT NULL,
     enrollmentlimit     INT NOT NULL,
-    enrollmentlimit     INT NOT NULL,
+    enrollment          INT NOT NULL,
     PRIMARY KEY (classinstance),
-    FOREIGN KEY (classnumber) REFERENCES class(classnumber),
+    FOREIGN KEY (classid) REFERENCES class(classid),
     FOREIGN KEY (professorid) REFERENCES staff(staffid)
 );
 
 create table outcome (
-    classnumber         INT NOT NULL,
+    classid             INT NOT NULL,
     outcomenumber       INT NOT NULL,
-    FOREIGN KEY (classnumber) REFERENCES class(classnumber)
+    FOREIGN KEY (classid) REFERENCES class(classid)
 );
 
 create table prerequisite (
-    classnumber         INT NOT NULL,
+    classid             INT NOT NULL,
     prerequisite        INT NOT NULL,
-    FOREIGN KEY (classnumber) REFERENCES class(classnumber),
-    FOREIGN KEY (prerequisite) REFERENCES class(classnumber),
+    FOREIGN KEY (classid) REFERENCES class(classid),
+    FOREIGN KEY (prerequisite) REFERENCES class(classid),
 );
 
 create table staff (
@@ -95,7 +96,9 @@ create table staff (
     middlename          CHAR,
     lastname            CHAR NOT NULL,
     yearsworked         INT NOT NULL,
-    tenure              CHAR NOT NULL,
+    tenure              BOOLEAN NOT NULL,
+    location            CHAR NOT NULL,
+    salary              INT NOT NULL,
     PRIMARY KEY (staffid),
     FOREIGN KEY (jobid) REFERENCES job(jobid),
 );
@@ -103,9 +106,7 @@ create table staff (
 create table jobtype (
     jobid               INT NOT NULL UNIQUE,
     jobname             CHAR NOT NULL UNIQUE,
-    salary              INT NOT NULL,
     hours               INT NOT NULL,
-    location            CHAR NOT NULL,
     PRIMARY KEY (jobid)
 );
 
@@ -125,3 +126,21 @@ create table librarybooks (
     author              CHAR NOT NULL,
     PRIMARY KEY (bookid)
 );
+
+
+/* Import database in csv format example
+.separator ","
+.mode csv
+.import "00_build_db/movies.csv"  movies
+.import "00_build_db/stars.csv"   stars
+.import "00_build_db/studios.csv" studios
+.import "00_build_db/starIn.csv"  starIn
+
+*/
+
+.separator ","
+.mode csv
+.import "db_proj_3/librarybooks.csv"  librarybooks
+.import "db_proj_3/jobtype.csv"  jobtype
+.import "db_proj_3/staff.csv"  staff
+.import "db_proj_3/class.csv"  class
