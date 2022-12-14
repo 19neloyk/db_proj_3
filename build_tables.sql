@@ -62,19 +62,37 @@ create table class (
 );
 
 create table classinstance (
-    
+    crn                 INT NOT NULL,
+    lnumber             INT NOT NULL,
+    status              INT NOT NULL, /*Number representing if withdrawn, in-progress, or if taken already*/
+    grade               CHAR /*Can be null if still in progress or withdrawn*/,
+    FOREIGN KEY (crn),
+    FOREIGN KEY (lnumber)
 );
 
 create table outcome (
-
+    classnumber         INT NOT NULL,
+    outcomenumber       INT NOT NULL,
+    FOREIGN KEY (classnumber) REFERENCES class(classnumber)
 );
 
 create table prerequisite (
-
+    classnumber         INT NOT NULL,
+    prerequisite        INT NOT NULL,
+    FOREIGN KEY (classnumber) REFERENCES class(classnumber),
+    FOREIGN KEY (prerequisite) REFERENCES class(classnumber),
 );
 
 create table staff (
-
+    staffid             INT NOT NULL UNIQUE,
+    jobid               INT NOT NULL,
+    firstname           CHAR NOT NULL,
+    middlename          CHAR,
+    lastname            CHAR NOT NULL,
+    yearsworked         INT NOT NULL,
+    tenure              CHAR NOT NULL,
+    PRIMARY KEY (staffid),
+    FOREIGN KEY (jobid) REFERENCES job(jobid),
 );
 
 create table jobtype (
