@@ -62,12 +62,17 @@ create table class (
 );
 
 create table classinstance (
-    crn                 INT NOT NULL,
-    lnumber             INT NOT NULL,
-    status              INT NOT NULL, /*Number representing if withdrawn, in-progress, or if taken already*/
-    grade               CHAR /*Can be null if still in progress or withdrawn*/,
-    FOREIGN KEY (crn),
-    FOREIGN KEY (lnumber)
+    crn                 INT NOT NULL UNIQUE,
+    classnumber         INT NOT NULL,
+    professorid         INT NOT NULL,
+    semester            CHAR NOT NULL,
+    section             INT NOT NULL,
+    location            CHAR NOT NULL,
+    enrollmentlimit     INT NOT NULL,
+    enrollmentlimit     INT NOT NULL,
+    PRIMARY KEY (classinstance),
+    FOREIGN KEY (classnumber) REFERENCES class(classnumber),
+    FOREIGN KEY (professorid) REFERENCES staff(staffid)
 );
 
 create table outcome (
@@ -96,21 +101,27 @@ create table staff (
 );
 
 create table jobtype (
-
+    jobid               INT NOT NULL UNIQUE,
+    jobname             CHAR NOT NULL UNIQUE,
+    salary              INT NOT NULL,
+    hours               INT NOT NULL,
+    location            CHAR NOT NULL,
+    PRIMARY KEY (jobid)
 );
-
-
-/*Links student with their respective residence hall*/
-create table studenttoresidencehall (
-
-);
-
 
 /*Links student to their respective class instance*/
 create table studenttoclassinstance (
-
+    crn                 INT NOT NULL,
+    lnumber             INT NOT NULL,
+    status              INT NOT NULL, /*Number representing if withdrawn, in-progress, or if taken already*/
+    grade               CHAR /*Can be null if still in progress or withdrawn*/,
+    FOREIGN KEY (crn),
+    FOREIGN KEY (lnumber)
 );
 
 create table librarybooks (
-
+    bookid              INT NOT NULL UNIQUE,
+    bookname            CHAR NOT NULL,
+    author              CHAR NOT NULL,
+    PRIMARY KEY (bookid)
 );
