@@ -48,7 +48,6 @@ create table residencehall (
     floors              INT NOT NULL,
     tier                INT NOT NULL,
     capacity            INT NOT NULL,
-    cost                INT NOT NULL,
     oncampus            BOOLEAN NOT NULL,
     PRIMARY KEY (hallid)
 );
@@ -66,11 +65,11 @@ create table classinstance (
     crn                 INT NOT NULL UNIQUE,
     classid             INT NOT NULL,
     professorid         INT NOT NULL,
-    semester            CHAR NOT NULL,
     section             INT NOT NULL,
+    semester            CHAR NOT NULL, /* Either Fall, Winter, Spring, or Summer (I know Winter and Summer are not technically semesters) */
+    year                INT NOT NULL,
     location            CHAR NOT NULL,
-    enrollmentlimit     INT NOT NULL,
-    enrollment          INT NOT NULL,
+    enrollmentlimit     INT NOT NULL, /* We don't need current enrollment number since we can just run a COUNT query for that to check for it */
     PRIMARY KEY (classinstance),
     FOREIGN KEY (classid) REFERENCES class(classid),
     FOREIGN KEY (professorid) REFERENCES staff(staffid)
@@ -128,14 +127,13 @@ create table librarybooks (
 );
 
 
-/* Import database in csv format example
+/* build database from csv format example
 .separator ","
 .mode csv
 .import "00_build_db/movies.csv"  movies
 .import "00_build_db/stars.csv"   stars
 .import "00_build_db/studios.csv" studios
 .import "00_build_db/starIn.csv"  starIn
-
 */
 
 .separator ","
@@ -144,3 +142,6 @@ create table librarybooks (
 .import "db_proj_3/jobtype.csv"  jobtype
 .import "db_proj_3/staff.csv"  staff
 .import "db_proj_3/class.csv"  class
+.import "db_proj_3/classinstance.csv"  classinstance
+.import "db_proj_3/residencehall.csv"  residencehall
+.import "db_proj_3/student.csv"  student
