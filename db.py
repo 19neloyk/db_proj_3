@@ -1,6 +1,6 @@
 import psycopg2
 
-
+# Create the college database
 def create_db():
     conn = psycopg2.connect(
         database="postgres",
@@ -25,6 +25,7 @@ def create_db():
     #Closing the connection
     conn.close()
 
+# Create all of the tables in the college database according to the schema in build_tables.sql
 def create_db_tables():
     conn = psycopg2.connect(
         host="localhost",
@@ -45,7 +46,8 @@ def create_db_tables():
     
     #Closing the connection
     conn.close()
-    
+
+# Populate the tables in the college database with starting data
 def populate_db_tables():
     conn = psycopg2.connect(
     host="localhost",
