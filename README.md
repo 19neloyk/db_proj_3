@@ -19,4 +19,4 @@ loads the initial values of our database and allows us to play around with REAL 
 
 ## LEKSO! Look at the code
 
-All the code you need to examine in order to write your own code is located in `db.py.` You can load your own functions and play around with them inside the python shell. Just remember to firstly activate the python shell once in this directory by running either `python` or `python3` and then loading them with `exec(open('your-file-name.py').read())`.
+All the code you need to examine in order to write your own code is located in `db.py`. You can load your own functions and play around with them inside the python shell. Just remember to firstly activate the python shell once in this directory by running either `python` or `python3` and then loading them with `exec(open('your-file-name.py').read())`.
