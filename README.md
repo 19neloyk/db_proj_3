@@ -3,7 +3,7 @@
 To set up, first make sure you have `postgresql` installed. Make sure that your password for the master
 user (the username of this user is literally postgres). Also, make sure that your password is `password`
 
-You must then run `pip install psycopg2` in this directory (we can ignore virtual environments for now)
+You must then run `pip install psycopg2` in this directory (we can ignore virtual environments for now).
 If this doesn't work, check if you have Python3 installed, and do `pip3 install psycopg2` instead
 
 
