@@ -242,7 +242,9 @@ def main():
             break
         make_db_query(query)
     
+    
+    #LEXO# Can not drop tables rn to run simulation. 
     # Drop the database tables as cleanup
-    drop_db_tables()
+    #drop_db_tables()
 
     
