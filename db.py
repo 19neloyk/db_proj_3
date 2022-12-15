@@ -177,7 +177,7 @@ def drop_db_tables():
     
     #Closing the connection
     conn.close()
-    
+
 def show_table(table_name):
     conn = psycopg2.connect(
         host="localhost",
@@ -196,6 +196,51 @@ def show_table(table_name):
     result = cursor.fetchone()
     print(result)
     
-    #Closing the connection
+    # Closing the connection
     conn.close()
+
+def make_db_query(query):
+    conn = psycopg2.connect(
+        host="localhost",
+        database="college",
+        user="postgres",
+        password="password" # Assuming this is your password
+    )
+    
+    conn.autocommit = True
+    # Creating a cursor object using the cursor() method
+    cursor = conn.cursor()
+    
+    cursor.execute(query)
+    if query.lower().startswith("select"):
+        result = cursor.fetchall()
+        print(result)
+    else:
+        print("Successfully executed query")
+    
+    # Close the connection
+    conn.close()
+        
+# Main function
+def main():
+    
+    # Drop the database tables in case they were already created
+    drop_db_tables()
+    
+    # Create the database tables
+    create_db_tables()
+    
+    # Populate the database tables
+    populate_db_tables()
+    
+    while(True):
+        print("Enter a query to execute or 'exit' to quit")
+        query = input(">  ")
+        if query == "exit":
+            break
+        make_db_query(query)
+    
+    # Drop the database tables as cleanup
+    drop_db_tables()
+
     
