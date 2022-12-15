@@ -29,6 +29,12 @@ create table residencehall (
     PRIMARY KEY (hallid)
 );
 
+create table major (
+    majorid INT NOT NULL UNIQUE,
+    majorname VARCHAR(250) NOT NULL,
+    majordegree VARCHAR(250) NOT NULL
+);
+
 create table student (
     lnumber             INT NOT NULL UNIQUE,
     hallid              INT NOT NULL,

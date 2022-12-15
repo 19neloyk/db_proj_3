@@ -8,3 +8,4 @@ drop table if exists outcome;
 drop table if exists course;
 drop table if exists librarybooks;
 drop table if exists residencehall;
+drop table if exists major;

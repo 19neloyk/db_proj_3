@@ -112,6 +112,12 @@ def populate_db_tables():
              (4,"McKelvy Hall", "200 Happy Street", 2, 3, 25, False)]
     [cursor.execute(residenthall_sql, val) for val in values]
     
+    major_sql = "INSERT INTO major VALUES (%s, %s, %s)"
+    values =[(0, "Computer Science", "Bachelor of Science"),
+             (1, "Computer Science", "Bachelor of Arts"),
+             (2, "Mathematics",      "Bachelor of Science")] 
+    [cursor.execute(major_sql, val) for val in values]
+    
     student_sql = "INSERT INTO student VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
     values =[(0, 0, "Neloy", None, "Kundu", 2023, "BS", "Math", "neloy@laf.edu", "32452453555", "5 Home St", "2001-10-19", "1232", "78452453555", 1, "Has a bad disciplinary record"),
              (1, 2, "Lekso", None, "Borashvili", 2023, "BS", "Computer Science", "lekso@laf.edu", "23408914325", "6 Georgia St", "2001-08-23", "6235", "53408914325", 2, None),
