@@ -77,7 +77,7 @@ create table classinstance (
 
 create table outcome (
     classid             INT NOT NULL,
-    outcomenumber       INT NOT NULL,
+    outcometype         CHAR NOT NULL, /* Outcomes can be GM1, GM2, H, V, W, SS, NS, FYS */
     FOREIGN KEY (classid) REFERENCES class(classid)
 );
 
@@ -111,12 +111,12 @@ create table jobtype (
 
 /*Links student to their respective class instance*/
 create table studenttoclassinstance (
-    crn                 INT NOT NULL,
     lnumber             INT NOT NULL,
-    status              INT NOT NULL, /*Number representing if withdrawn, in-progress, or if taken already*/
+    crn                 INT NOT NULL,
+    status              CHAR NOT NULL, /*Number representing if withdrawn, in-progress, or if taken already*/
     grade               CHAR /*Can be null if still in progress or withdrawn*/,
-    FOREIGN KEY (crn),
-    FOREIGN KEY (lnumber)
+    FOREIGN KEY (lnumber),
+    FOREIGN KEY (crn)
 );
 
 create table librarybooks (
@@ -145,3 +145,7 @@ create table librarybooks (
 .import "db_proj_3/classinstance.csv"  classinstance
 .import "db_proj_3/residencehall.csv"  residencehall
 .import "db_proj_3/student.csv"  student
+.import "db_proj_3/studenttoclassinstance.csv"  studenttoclassinstance
+.import "db_proj_3/prerequisite.csv"  prerequisite
+.import "db_proj_3/outcome.csv"  outcome
+
