@@ -91,7 +91,7 @@ def populate_db_tables():
                 (5, 335, "MATH", "Introduction to Probability", None)]
     [cursor.execute(course_sql, val) for val in values]
     
-    classinstance_sql = "INSERT INTO classinstance VALUES (%s, %s, %s, %s, %s, %s, %s)"
+    classinstance_sql = "INSERT INTO classinstance VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
     values =[(0,0,0,0,"Fall", 2022,"Rockwell",20),
              (1,0,0,1,"Fall", 2022, "Rockwell",20),
              (2,1,0,0,"Spring", 2023, "Hugel",20),
@@ -100,9 +100,7 @@ def populate_db_tables():
              (5,4,0,0,"Spring", 2023, "Rockwell",20),
              (6,4,1,1,"Spring", 2023, "Acopian",20),
              (7,5,1,0,"Summer", 2023, "Hugel",20)]
-    for val in values:
-        print("HI")
-        cursor.execute(classinstance_sql, val)
+    [cursor.execute(classinstance_sql, val) for val in values]
 
     residenthall_sql = "INSERT INTO residencehall VALUES (%s, %s, %s, %s, %s, %s, %s)"
     values =[(0,"Gates Hall", "14 Quad Drive", 4, 1, 130, True),
@@ -113,12 +111,12 @@ def populate_db_tables():
     [cursor.execute(residenthall_sql, val) for val in values]
     
     student_sql = "INSERT INTO student VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-    values =[(0, "Neloy", None, "Kundu", 2023, "BS", "Math", "neloy@laf.edu", 32452453555, "5 Home St", "2001-10-19", 1232, 78452453555, 1, "Has a bad disciplinary record"),
-             (0, "Lekso", None, "Borashvili", 2023, "BS", "Computer Science", "lekso@laf.edu", 23408914325, "6 Georgia St", "2001-08-23", 6235, 53408914325, 2, None),
-             (0, "Jackson", "John", "Chambers", 2024, "BA", "Computer Science", "jackson@laf.edu", 19028734678, "1 Conn Ave", "2002-09-08", 6463, 6408914325, 3, None),
-             (0, "Griffin", "Jack", "Spahr", 2024, "BA", "Government and Law", "griffin@laf.edu", 34678190287, "4 Main Line Dr", "2001-08-23", 1234, 83408914325, 2, None),
-             (0, "Thomas", "Tate", "Vasu", 2022, "BA", "Economics", "tate@laf.edu", 40989072513, "83 Philly Dr", "2000-03-02", 7688, 13408914325, 3, "On the brink of getting expelled"),
-             (0, "Malolan", None, "Vasu", 2023, "BS", "Math", "malo@laf.edu", 12398021392, "100 India Ave", "2001-07-13", 9756, 63409814325, 1, None)]
+    values =[(0, 0, "Neloy", None, "Kundu", 2023, "BS", "Math", "neloy@laf.edu", "32452453555", "5 Home St", "2001-10-19", "1232", "78452453555", 1, "Has a bad disciplinary record"),
+             (1, 2, "Lekso", None, "Borashvili", 2023, "BS", "Computer Science", "lekso@laf.edu", "23408914325", "6 Georgia St", "2001-08-23", "6235", "53408914325", 2, None),
+             (2, 1, "Jackson", "John", "Chambers", 2024, "BA", "Computer Science", "jackson@laf.edu", "19028734678", "1 Conn Ave", "2002-09-08", "6463", "6408914325", 3, None),
+             (3, 0, "Griffin", "Jack", "Spahr", 2024, "BA", "Government and Law", "griffin@laf.edu", "34678190287", "4 Main Line Dr", "2001-08-23", "1234", "83408914325", 2, None),
+             (4, 2, "Thomas", "Tate", "Vasu", 2022, "BA", "Economics", "tate@laf.edu", "40989072513", "83 Philly Dr", "2000-03-02", "7688", "13408914325", 3, "On the brink of getting expelled"),
+             (5, 1, "Malolan", None, "Vasu", 2023, "BS", "Math", "malo@laf.edu", "12398021392", "100 India Ave", "2001-07-13", "9756", "63409814325", 1, None)]
     [cursor.execute(student_sql, val) for val in values]
     
     studenttoclassinstance_sql = "INSERT INTO studenttoclassinstance VALUES (%s, %s, %s, %s)"
@@ -145,7 +143,7 @@ def populate_db_tables():
               (5,4)]
     [cursor.execute(prerequisite_sql, val) for val in values]
     
-    outcome_sql = "INSERT INTO prerequisite VALUES (%s, %s)"
+    outcome_sql = "INSERT INTO outcome VALUES (%s, %s)"
     values = [(0,"NS"),
               (1,"W"),
               (3,"W"),
@@ -179,3 +177,25 @@ def drop_db_tables():
     
     #Closing the connection
     conn.close()
+    
+def show_table(table_name):
+    conn = psycopg2.connect(
+        host="localhost",
+        database="college",
+        user="postgres",
+        password="password" # Assuming this is your password
+    )
+
+    conn.autocommit = True
+
+    # Creating a cursor object using the cursor() method
+    cursor = conn.cursor()
+    
+    # Access table values and print them
+    cursor.execute("SELECT * FROM " + table_name)
+    result = cursor.fetchone()
+    print(result)
+    
+    #Closing the connection
+    conn.close()
+    
