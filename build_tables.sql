@@ -50,13 +50,13 @@ create table student (
     FOREIGN KEY (hallid) REFERENCES residencehall(hallid)
 );
 
-create table class (
-    classid             INT NOT NULL UNIQUE, /* Arbitrary unique identifier */
-    classnumber         INT NOT NULL,   /* This represents the 320 in "CS320" */       
+create table course (
+    courseid             INT NOT NULL UNIQUE, /* Arbitrary unique identifier */
+    coursenumber         INT NOT NULL,   /* This represents the 320 in "CS320" */       
     department          CHAR NOT NULL,  /* This represents the "CS" in "CS320" */
     name                CHAR NOT NULL,
     description         CHAR,
-    PRIMARY KEY (classnumber)
+    PRIMARY KEY (coursenumber)
 );
 
 create table jobtype (
@@ -82,7 +82,7 @@ create table staff (
 
 create table classinstance (
     crn                 INT NOT NULL UNIQUE,
-    classid             INT NOT NULL,
+    coursenumber             INT NOT NULL,
     professorid         INT NOT NULL,
     section             INT NOT NULL,
     semester            CHAR NOT NULL, /* Either Fall, Winter, Spring, or Summer (I know Winter and Summer are not technically semesters) */
@@ -90,21 +90,21 @@ create table classinstance (
     location            CHAR NOT NULL,
     enrollmentlimit     INT NOT NULL, /* We don't need current enrollment number since we can just run a COUNT query for that to check for it */
     PRIMARY KEY (crn),
-    FOREIGN KEY (classid) REFERENCES class(classid),
+    FOREIGN KEY (coursenumber) REFERENCES course(coursenumber),
     FOREIGN KEY (professorid) REFERENCES staff(staffid)
 );
 
 create table outcome (
-    classid             INT NOT NULL,
+    coursenumber        INT NOT NULL,
     outcometype         CHAR NOT NULL, /* Outcomes can be GM1, GM2, H, V, W, SS, NS, FYS */
-    FOREIGN KEY (classid) REFERENCES class(classid)
+    FOREIGN KEY (coursenumber) REFERENCES course(coursenumber)
 );
 
 create table prerequisite (
-    classid             INT NOT NULL,
+    coursenumber             INT NOT NULL,
     prerequisite        INT NOT NULL,
-    FOREIGN KEY (classid) REFERENCES class(classid),
-    FOREIGN KEY (prerequisite) REFERENCES class(classid)
+    FOREIGN KEY (coursenumber) REFERENCES course(coursenumber),
+    FOREIGN KEY (prerequisite) REFERENCES course(coursenumber)
 );
 
 /*Links student to their respective class instance*/
@@ -119,24 +119,9 @@ create table studenttoclassinstance (
 
 create table librarybooks (
     bookid              INT NOT NULL UNIQUE,
-    bookname            CHAR NOT NULL,
-    author              CHAR NOT NULL,
+    bookname            CHAR(100) NOT NULL,
+    author              CHAR(100) NOT NULL,
     PRIMARY KEY (bookid)
 );
 
-
-/* FORMAT FOR POSTRESQL CSV importing
-COPY zip_codes FROM '/path/to/csv/ZIP_CODES.txt' WITH (FORMAT csv);
-*/
-COPY librarybooks FROM '/Users/neloykundu/Desktop/db_proj_3/example_csvs/librarybooks.csv' WITH (FORMAT csv);
-COPY jobtype FROM './example_csvs/jobtype.csv' WITH (FORMAT csv);
-COPY staff FROM './example_csvs/staff.csv' WITH (FORMAT csv);
-COPY class FROM './example_csvs/class.csv' WITH (FORMAT csv);
-COPY classinstance FROM './example_csvs/classinstance.csv' WITH (FORMAT csv);
-COPY residencehall FROM './example_csvs/residencehall.csv' WITH (FORMAT csv);
-COPY student FROM './example_csvs/student.csv' WITH (FORMAT csv);
-COPY student FROM './example_csvs/student.csv' WITH (FORMAT csv);
-COPY studenttoclassinstance FROM './example_csvs/studenttoclassinstance.csv' WITH (FORMAT csv);
-COPY prerequisite FROM './example_csvs/prerequisite.csv' WITH (FORMAT csv);
-COPY outcome FROM './example_csvs/outcome.csv' WITH (FORMAT csv);
 
