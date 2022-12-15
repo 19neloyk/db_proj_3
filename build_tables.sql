@@ -18,6 +18,16 @@ CREATE TABLE Orders (
 );
 */
 
+create table residencehall (
+    hallid              INT NOT NULL UNIQUE,
+    hallname            CHAR NOT NULL,
+    location            CHAR NOT NULL,
+    floors              INT NOT NULL,
+    tier                INT NOT NULL,
+    capacity            INT NOT NULL,
+    oncampus            BOOLEAN NOT NULL,
+    PRIMARY KEY (hallid)
+);
 
 create table student (
     lnumber             INT NOT NULL UNIQUE,
@@ -40,18 +50,6 @@ create table student (
     FOREIGN KEY (hallid) REFERENCES residencehall(hallid)
 );
 
-
-create table residencehall (
-    hallid              INT NOT NULL UNIQUE,
-    hallname            CHAR NOT NULL,
-    location            CHAR NOT NULL,
-    floors              INT NOT NULL,
-    tier                INT NOT NULL,
-    capacity            INT NOT NULL,
-    oncampus            BOOLEAN NOT NULL,
-    PRIMARY KEY (hallid)
-);
-
 create table class (
     classid             INT NOT NULL UNIQUE, /* Arbitrary unique identifier */
     classnumber         INT NOT NULL,   /* This represents the 320 in "CS320" */       
@@ -59,6 +57,27 @@ create table class (
     name                CHAR NOT NULL,
     description         CHAR,
     PRIMARY KEY (classnumber)
+);
+
+create table jobtype (
+    jobid               INT NOT NULL UNIQUE,
+    jobname             CHAR NOT NULL UNIQUE,
+    hours               INT NOT NULL,
+    PRIMARY KEY (jobid)
+);
+
+create table staff (
+    staffid             INT NOT NULL UNIQUE,
+    jobid               INT NOT NULL,
+    firstname           CHAR NOT NULL,
+    middlename          CHAR,
+    lastname            CHAR NOT NULL,
+    yearsworked         INT NOT NULL,
+    tenure              BOOLEAN NOT NULL,
+    location            CHAR NOT NULL,
+    salary              INT NOT NULL,
+    PRIMARY KEY (staffid),
+    FOREIGN KEY (jobid) REFERENCES jobtype(jobid)
 );
 
 create table classinstance (
@@ -70,7 +89,7 @@ create table classinstance (
     year                INT NOT NULL,
     location            CHAR NOT NULL,
     enrollmentlimit     INT NOT NULL, /* We don't need current enrollment number since we can just run a COUNT query for that to check for it */
-    PRIMARY KEY (classinstance),
+    PRIMARY KEY (crn),
     FOREIGN KEY (classid) REFERENCES class(classid),
     FOREIGN KEY (professorid) REFERENCES staff(staffid)
 );
@@ -85,28 +104,7 @@ create table prerequisite (
     classid             INT NOT NULL,
     prerequisite        INT NOT NULL,
     FOREIGN KEY (classid) REFERENCES class(classid),
-    FOREIGN KEY (prerequisite) REFERENCES class(classid),
-);
-
-create table staff (
-    staffid             INT NOT NULL UNIQUE,
-    jobid               INT NOT NULL,
-    firstname           CHAR NOT NULL,
-    middlename          CHAR,
-    lastname            CHAR NOT NULL,
-    yearsworked         INT NOT NULL,
-    tenure              BOOLEAN NOT NULL,
-    location            CHAR NOT NULL,
-    salary              INT NOT NULL,
-    PRIMARY KEY (staffid),
-    FOREIGN KEY (jobid) REFERENCES job(jobid),
-);
-
-create table jobtype (
-    jobid               INT NOT NULL UNIQUE,
-    jobname             CHAR NOT NULL UNIQUE,
-    hours               INT NOT NULL,
-    PRIMARY KEY (jobid)
+    FOREIGN KEY (prerequisite) REFERENCES class(classid)
 );
 
 /*Links student to their respective class instance*/
@@ -114,9 +112,9 @@ create table studenttoclassinstance (
     lnumber             INT NOT NULL,
     crn                 INT NOT NULL,
     status              CHAR NOT NULL, /*Number representing if withdrawn, in-progress, or if taken already*/
-    grade               CHAR /*Can be null if still in progress or withdrawn*/,
-    FOREIGN KEY (lnumber),
-    FOREIGN KEY (crn)
+    grade               CHAR, /*Can be null if still in progress or withdrawn*/
+    FOREIGN KEY (lnumber) REFERENCES student(lnumber),
+    FOREIGN KEY (crn) REFERENCES classinstance(crn)
 );
 
 create table librarybooks (
@@ -127,25 +125,18 @@ create table librarybooks (
 );
 
 
-/* build database from csv format example
-.separator ","
-.mode csv
-.import "00_build_db/movies.csv"  movies
-.import "00_build_db/stars.csv"   stars
-.import "00_build_db/studios.csv" studios
-.import "00_build_db/starIn.csv"  starIn
+/* FORMAT FOR POSTRESQL CSV importing
+COPY zip_codes FROM '/path/to/csv/ZIP_CODES.txt' WITH (FORMAT csv);
 */
-
-.separator ","
-.mode csv
-.import "db_proj_3/librarybooks.csv"  librarybooks
-.import "db_proj_3/jobtype.csv"  jobtype
-.import "db_proj_3/staff.csv"  staff
-.import "db_proj_3/class.csv"  class
-.import "db_proj_3/classinstance.csv"  classinstance
-.import "db_proj_3/residencehall.csv"  residencehall
-.import "db_proj_3/student.csv"  student
-.import "db_proj_3/studenttoclassinstance.csv"  studenttoclassinstance
-.import "db_proj_3/prerequisite.csv"  prerequisite
-.import "db_proj_3/outcome.csv"  outcome
+COPY librarybooks FROM '/Users/neloykundu/Desktop/db_proj_3/example_csvs/librarybooks.csv' WITH (FORMAT csv);
+COPY jobtype FROM './example_csvs/jobtype.csv' WITH (FORMAT csv);
+COPY staff FROM './example_csvs/staff.csv' WITH (FORMAT csv);
+COPY class FROM './example_csvs/class.csv' WITH (FORMAT csv);
+COPY classinstance FROM './example_csvs/classinstance.csv' WITH (FORMAT csv);
+COPY residencehall FROM './example_csvs/residencehall.csv' WITH (FORMAT csv);
+COPY student FROM './example_csvs/student.csv' WITH (FORMAT csv);
+COPY student FROM './example_csvs/student.csv' WITH (FORMAT csv);
+COPY studenttoclassinstance FROM './example_csvs/studenttoclassinstance.csv' WITH (FORMAT csv);
+COPY prerequisite FROM './example_csvs/prerequisite.csv' WITH (FORMAT csv);
+COPY outcome FROM './example_csvs/outcome.csv' WITH (FORMAT csv);
 
