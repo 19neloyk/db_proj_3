@@ -25,7 +25,7 @@ def create_db():
     #Closing the connection
     conn.close()
 
-def build_db_tables():
+def create_db_tables():
     conn = psycopg2.connect(
         host="localhost",
         database="college",
@@ -60,7 +60,7 @@ def populate_db_tables():
     cursor = conn.cursor()
     
     # Insertion sqls
-    librarybooks_sql = "INSERT INTO librarybooks VALUES (%d, %s, %s)"
+    librarybooks_sql = "INSERT INTO librarybooks VALUES (%s, %s, %s)"
     values = [(0, "War and Peace", "Leo Tolstoy"),
                 (1,"Clifford the Big Red Dog","Norman Bridwell"),
                 (2, "Zoo", "James Patterson")]
@@ -135,18 +135,45 @@ def populate_db_tables():
               (4,1,"FAILED", "F"),
               (4,3,"IN-PROGRESS", None),
               (4,4,"WITHDRAWN", None)]
+    [cursor.execute(studenttoclassinstance_sql, val) for val in values]
     
     prerequisite_sql = "INSERT INTO prerequisite VALUES (%d, %d)"
-    
+    values = [(1,0),
+              (2,1),
+              (5,4)]
+    [cursor.execute(prerequisite_sql, val) for val in values]
     
     outcome_sql = "INSERT INTO prerequisite VALUES (%d, %s)"
+    values = [(0,"NS"),
+              (1,"W"),
+              (3,"W"),
+              (3,"H"),
+              (4,"W")]
+    [cursor.execute(outcome_sql, val) for val in values]
     
     
+    print("Database populated successfully");
+    # Closing the connection
+    conn.close()
     
-    # Start inserting actual information into the databases
-        
-        
-        
-        
+    
+def drop_db_tables():
+    conn = psycopg2.connect(
+        host="localhost",
+        database="college",
+        user="postgres",
+        password="password" # Assuming this is your password
+    )
 
+    conn.autocommit = True
 
+    # Creating a cursor object using the cursor() method
+    cursor = conn.cursor()
+    
+    # Now populate the database with its tables, and starting table data
+    cursor.execute(open("drop_tables.sql", "r").read())
+    print("Database tables dropped successfully");
+    
+    
+    #Closing the connection
+    conn.close()

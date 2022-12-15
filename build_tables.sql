@@ -97,7 +97,7 @@ create table classinstance (
 create table outcome (
     coursenumber        INT NOT NULL,
     outcometype         CHAR NOT NULL, /* Outcomes can be GM1, GM2, H, V, W, SS, NS, FYS */
-    FOREIGN KEY (classid) REFERENCES course(coursenumber)
+    FOREIGN KEY (coursenumber) REFERENCES course(coursenumber)
 );
 
 create table prerequisite (
@@ -119,23 +119,9 @@ create table studenttoclassinstance (
 
 create table librarybooks (
     bookid              INT NOT NULL UNIQUE,
-    bookname            CHAR NOT NULL,
-    author              CHAR NOT NULL,
+    bookname            CHAR(100) NOT NULL,
+    author              CHAR(100) NOT NULL,
     PRIMARY KEY (bookid)
 );
 
-
-/* FORMAT FOR POSTRESQL CSV importing
-COPY zip_codes FROM '/path/to/csv/ZIP_CODES.txt' WITH (FORMAT csv);
-*/
-COPY librarybooks FROM '/Users/neloykundu/Desktop/db_proj_3/example_csvs/librarybooks.csv' WITH (FORMAT csv);
-COPY jobtype FROM './example_csvs/jobtype.csv' WITH (FORMAT csv);
-COPY staff FROM './example_csvs/staff.csv' WITH (FORMAT csv);
-COPY course FROM './example_csvs/course.csv' WITH (FORMAT csv);
-COPY classinstance FROM './example_csvs/classinstance.csv' WITH (FORMAT csv);
-COPY residencehall FROM './example_csvs/residencehall.csv' WITH (FORMAT csv);
-COPY student FROM './example_csvs/student.csv' WITH (FORMAT csv);
-COPY studenttoclassinstance FROM './example_csvs/studenttoclassinstance.csv' WITH (FORMAT csv);
-COPY prerequisite FROM './example_csvs/prerequisite.csv' WITH (FORMAT csv);
-COPY outcome FROM './example_csvs/outcome.csv' WITH (FORMAT csv);
 
