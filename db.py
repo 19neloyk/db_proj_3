@@ -1,5 +1,5 @@
 import psycopg2
-
+import simulation
 # Create the college database
 def create_db():
     conn = psycopg2.connect(
@@ -117,14 +117,14 @@ def populate_db_tables():
              (1, "Computer Science", "Bachelor of Arts"),
              (2, "Mathematics",      "Bachelor of Science")] 
     [cursor.execute(major_sql, val) for val in values]
-    
-    student_sql = "INSERT INTO student VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-    values =[(0, 0, "Neloy", None, "Kundu", 2023, "BS", "Math", "neloy@laf.edu", "32452453555", "5 Home St", "2001-10-19", "1232", "78452453555", 1, "Has a bad disciplinary record"),
-             (1, 2, "Lekso", None, "Borashvili", 2023, "BS", "Computer Science", "lekso@laf.edu", "23408914325", "6 Georgia St", "2001-08-23", "6235", "53408914325", 2, None),
-             (2, 1, "Jackson", "John", "Chambers", 2024, "BA", "Computer Science", "jackson@laf.edu", "19028734678", "1 Conn Ave", "2002-09-08", "6463", "6408914325", 3, None),
-             (3, 0, "Griffin", "Jack", "Spahr", 2024, "BA", "Government and Law", "griffin@laf.edu", "34678190287", "4 Main Line Dr", "2001-08-23", "1234", "83408914325", 2, None),
-             (4, 2, "Thomas", "Tate", "Vasu", 2022, "BA", "Economics", "tate@laf.edu", "40989072513", "83 Philly Dr", "2000-03-02", "7688", "13408914325", 3, "On the brink of getting expelled"),
-             (5, 1, "Malolan", None, "Vasu", 2023, "BS", "Math", "malo@laf.edu", "12398021392", "100 India Ave", "2001-07-13", "9756", "63409814325", 1, None)]
+
+    student_sql = "INSERT INTO student VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    values =[(0, 0, "Neloy", None, "Kundu", 2023, "neloy@laf.edu", "32452453555", "5 Home St", "2001-10-19", "1232", "78452453555", 1, "Has a bad disciplinary record"),
+             (1, 2, "Lekso", None, "Borashvili", 2023,  "lekso@laf.edu", "23408914325", "6 Georgia St", "2001-08-23", "6235", "53408914325", 2, None),
+             (2, 1, "Jackson", "John", "Chambers", 2024, "jackson@laf.edu", "19028734678", "1 Conn Ave", "2002-09-08", "6463", "6408914325", 3, None),
+             (3, 0, "Griffin", "Jack", "Spahr", 2024, "griffin@laf.edu", "34678190287", "4 Main Line Dr", "2001-08-23", "1234", "83408914325", 2, None),
+             (4, 2, "Thomas", "Tate", "Vasu", 2022, "tate@laf.edu", "40989072513", "83 Philly Dr", "2000-03-02", "7688", "13408914325", 3, "On the brink of getting expelled"),
+             (5, 1, "Malolan", None, "Vasu", 2023, "malo@laf.edu", "12398021392", "100 India Ave", "2001-07-13", "9756", "63409814325", 1, None)]
     [cursor.execute(student_sql, val) for val in values]
     
     studenttoclassinstance_sql = "INSERT INTO studenttoclassinstance VALUES (%s, %s, %s, %s)"
@@ -237,10 +237,17 @@ def main():
     
     # Create the database tables
     create_db_tables()
+
+    #TESTS
+    #to make sure any method that we use does not fail after changes
     
+
+
     # Populate the database tables
     populate_db_tables()
-    
+
+    simulation.add_student()
+
     while(True):
         print("Enter a query to execute or 'exit' to quit")
         query = input(">  ")

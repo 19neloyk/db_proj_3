@@ -32,7 +32,8 @@ create table residencehall (
 create table major (
     majorid INT NOT NULL UNIQUE,
     majorname VARCHAR(250) NOT NULL,
-    majordegree VARCHAR(250) NOT NULL
+    majordegree VARCHAR(250) NOT NULL,
+    PRIMARY KEY(majorid) 
 );
 
 create table student (
@@ -42,10 +43,8 @@ create table student (
     middlename          VARCHAR(250),
     lastname            VARCHAR(250) NOT NULL,
     classyear           INT NOT NULL,
-    degree              CHAR(2) NOT NULL,
-    major               VARCHAR(250) NOT NULL,
     email               VARCHAR(50) NOT NULL,
-    phonenumber         VARCHAR(15) NOT NULL,
+    phonenumber         VARCHAR(20) NOT NULL,
     adress              VARCHAR(120) NOT NULL,
     dob                 DATE NOT NULL,
     pobox               VARCHAR(4) NOT NULL,
@@ -56,6 +55,12 @@ create table student (
     FOREIGN KEY (hallid) REFERENCES residencehall(hallid)
 );
 
+create table studentmajor (
+    studentid INT NOT NULL,
+    majorid INT NOT NULL,
+    FOREIGN KEY (studentid) REFERENCES student(lnumber),
+    FOREIGN KEY (majorid) REFERENCES major(majorid)
+);
 create table course (
     courseid             INT NOT NULL UNIQUE, /* Arbitrary unique identifier */
     coursenumber         INT NOT NULL,   /* This represents the 320 in "CS320" */       

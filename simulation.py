@@ -12,7 +12,6 @@ def one_year_simulation():
     #generate student to get random grade in classes he is taking
 
 
-
 def add_student():
     
     conn = psycopg2.connect(
@@ -35,7 +34,7 @@ def add_student():
     residence_ids = cursor.fetchall()
     conn.commit()
 
-    student_sql = "INSERT INTO student VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    student_sql = "INSERT INTO student VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
     
     fake = Faker()
     id = max_id + 1
@@ -43,13 +42,17 @@ def add_student():
     first_name  = fake.first_name()
     last_name   = fake.last_name()
     email       = last_name+first_name + "laf.edu"
-
+    number      = fake.msisdn()
+    address     = fake.address()
+    emergency   = fake.msisdn()
     values =    ( id, hall_id, first_name, None, last_name,
-                 2023, "BS", "Math", email,
-                "32452453555", "5 Home St", "2001-10-19",
-                "1232", "78452453555", 1, "Has a bad disciplinary record")
+                 2023, email,
+                number, address, "2001-10-19",
+                "1232", emergency, 1, "Has a bad disciplinary record")
     
     cursor.execute(student_sql, values)
+
+    #we also need to give this kid a major. 
 
     print('student added')
     #commit the changes
