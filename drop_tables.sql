@@ -1,3 +1,4 @@
+drop table if exists majorcoursereqs;
 drop table if exists studentmajor;
 drop table if exists studenttoclassinstance;
 drop table if exists student;

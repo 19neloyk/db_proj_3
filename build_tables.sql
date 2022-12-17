@@ -50,6 +50,7 @@ create table student (
     pobox               VARCHAR(4) NOT NULL,
     emergencycontact    VARCHAR(15) NOT NULL,
     mealplan            INT NOT NULL,
+    graduated           INT,
     notes               VARCHAR(250),
     PRIMARY KEY (lnumber),
     FOREIGN KEY (hallid) REFERENCES residencehall(hallid)
@@ -68,6 +69,13 @@ create table course (
     name                VARCHAR(250) NOT NULL,
     description         VARCHAR(250),
     PRIMARY KEY (courseid)
+);
+
+create table majorcoursereqs (
+    majorid INT NOT NULL, 
+    courseid INT NOT NULL,
+    FOREIGN KEY (majorid) REFERENCES major(majorid),
+    FOREIGN KEY (courseid) REFERENCES course(courseid)
 );
 
 create table jobtype (
@@ -93,13 +101,16 @@ create table staff (
 
 create table classinstance (
     crn                 INT NOT NULL UNIQUE,
-    courseid        INT NOT NULL,
+    courseid            INT NOT NULL,
     professorid         INT NOT NULL,
     section             INT NOT NULL,
-    semester            VARCHAR(10) NOT NULL, /* Either Fall, Winter, Spring, or Summer (I know Winter and Summer are not technically semesters) */
+    semester            VARCHAR(10) NOT NULL,   /* Either Fall, Winter, Spring, or Summer (I know Winter and Summer are not technically semesters) */
     year                INT NOT NULL,
     location            VARCHAR(250) NOT NULL,
-    enrollmentlimit     INT NOT NULL, /* We don't need current enrollment number since we can just run a COUNT query for that to check for it */
+    starttime           VARCHAR(10) NOT NULL,   /* this will be 0800 - 1600 format*/ 
+    duration            INT NOT NULL,           /* Duration in minutes */
+    weekdays            VARCHAR(10) NOT NULL,
+    enrollmentlimit     INT NOT NULL,           /* We don't need current enrollment number since we can just run a COUNT query for that to check for it */
     PRIMARY KEY (crn),
     FOREIGN KEY (courseid) REFERENCES course(courseid),
     FOREIGN KEY (professorid) REFERENCES staff(staffid)

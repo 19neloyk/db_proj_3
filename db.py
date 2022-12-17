@@ -93,15 +93,15 @@ def populate_db_tables():
                 (5, 335, "MATH", "Introduction to Probability", None)]
     [cursor.execute(course_sql, val) for val in values]
     
-    classinstance_sql = "INSERT INTO classinstance VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
-    values =[(0,0,0,0,"Fall", 2022,"Rockwell",20),
-             (1,0,0,1,"Fall", 2022, "Rockwell",20),
-             (2,1,0,0,"Spring", 2023, "Hugel",20),
-             (3,2,0,0,"Spring", 2023, "Hugel",20),
-             (4,3,1,0,"Winter", 2023, "Acopian",20),
-             (5,4,0,0,"Spring", 2023, "Rockwell",20),
-             (6,4,1,1,"Spring", 2023, "Acopian",20),
-             (7,5,1,0,"Summer", 2023, "Hugel",20)]
+    classinstance_sql = "INSERT INTO classinstance VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    values =[(0,0,0,0,"Fall", 2022,"Rockwell",   "0800", 50, "MWF", 20),
+             (1,0,0,1,"Fall", 2022, "Rockwell",  "1000", 50, "MWF", 20),
+             (2,1,0,0,"Spring", 2023, "Hugel",   "1000", 75, "TTH", 20),
+             (3,2,0,0,"Spring", 2023, "Hugel",   "1100", 50, "MWF", 20),
+             (4,3,1,0,"Winter", 2023, "Acopian", "1300", 50, "MWF", 20),
+             (5,4,0,0,"Spring", 2023, "Rockwell","1400", 50, "MWF", 20),
+             (6,4,1,1,"Spring", 2023, "Acopian", "1500", 50, "MWF", 20),
+             (7,5,1,0,"Summer", 2023, "Hugel",   "1100", 50, "MWF", 20)]
     [cursor.execute(classinstance_sql, val) for val in values]
 
     residenthall_sql = "INSERT INTO residencehall VALUES (%s, %s, %s, %s, %s, %s, %s)"
@@ -118,13 +118,19 @@ def populate_db_tables():
              (2, "Mathematics",      "Bachelor of Science")] 
     [cursor.execute(major_sql, val) for val in values]
 
-    student_sql = "INSERT INTO student VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-    values =[(0, 0, "Neloy", None, "Kundu", 2023, "neloy@laf.edu", "32452453555", "5 Home St", "2001-10-19", "1232", "78452453555", 1, "Has a bad disciplinary record"),
-             (1, 2, "Lekso", None, "Borashvili", 2023,  "lekso@laf.edu", "23408914325", "6 Georgia St", "2001-08-23", "6235", "53408914325", 2, None),
-             (2, 1, "Jackson", "John", "Chambers", 2024, "jackson@laf.edu", "19028734678", "1 Conn Ave", "2002-09-08", "6463", "6408914325", 3, None),
-             (3, 0, "Griffin", "Jack", "Spahr", 2024, "griffin@laf.edu", "34678190287", "4 Main Line Dr", "2001-08-23", "1234", "83408914325", 2, None),
-             (4, 2, "Thomas", "Tate", "Vasu", 2022, "tate@laf.edu", "40989072513", "83 Philly Dr", "2000-03-02", "7688", "13408914325", 3, "On the brink of getting expelled"),
-             (5, 1, "Malolan", None, "Vasu", 2023, "malo@laf.edu", "12398021392", "100 India Ave", "2001-07-13", "9756", "63409814325", 1, None)]
+    majorcoursereqs_sql = "INSERT INTO majorcoursereqs VALUES(%s, %s)"
+    values = [  (0, 0),
+                (0, 1),
+                (0, 2)]
+    [cursor.execute(majorcoursereqs_sql, val) for val in values]
+
+    student_sql = "INSERT INTO student VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    values =[(0, 0, "Neloy", None, "Kundu", 2023, "neloy@laf.edu", "32452453555", "5 Home St", "2001-10-19", "1232", "78452453555", 1, 0, "Has a bad disciplinary record"),
+             (1, 2, "Lekso", None, "Borashvili", 2023,  "lekso@laf.edu", "23408914325", "6 Georgia St", "2001-08-23", "6235", "53408914325", 2, 0, None),
+             (2, 1, "Jackson", "John", "Chambers", 2024, "jackson@laf.edu", "19028734678", "1 Conn Ave", "2002-09-08", "6463", "6408914325", 3, 0, None),
+             (3, 0, "Griffin", "Jack", "Spahr", 2024, "griffin@laf.edu", "34678190287", "4 Main Line Dr", "2001-08-23", "1234", "83408914325", 2, 0, None),
+             (4, 2, "Thomas", "Tate", "Vasu", 2022, "tate@laf.edu", "40989072513", "83 Philly Dr", "2000-03-02", "7688", "13408914325", 3, 0, "On the brink of getting expelled"),
+             (5, 1, "Malolan", None, "Vasu", 2023, "malo@laf.edu", "12398021392", "100 India Ave", "2001-07-13", "9756", "63409814325", 1, 0, None)]
     [cursor.execute(student_sql, val) for val in values]
     
     studenttoclassinstance_sql = "INSERT INTO studenttoclassinstance VALUES (%s, %s, %s, %s)"
@@ -247,6 +253,7 @@ def main():
     populate_db_tables()
 
     simulation.add_student()
+    simulation.add_classinstance(0, 1, 'FALL', 2022)
 
     while(True):
         print("Enter a query to execute or 'exit' to quit")
