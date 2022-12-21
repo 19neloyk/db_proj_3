@@ -2,12 +2,34 @@ from faker import Faker
 import psycopg2
 import random
 
-#this will be one year(2 semester) simulation. 
-def one_year_simulation():
-    semester = 'Fall'
+"""
+One semester simulation
+Takes in semester and year
+We have defined at the start what happens every semester(standard procedures of the school)
+"""
+def one_semester_simulation(semester, year):
+    
+    conn = psycopg2.connect(
+    host="localhost",
+    database="college",
+    user="postgres",
+    password="password" # Assuming this is your password
+    )
+
+    cursor = conn.cursor()
     #start of semester 
+    #let's say for this semester we add one instance of every course
+    course_sql = "SELECT courseid FROM course"
 
+    cursor.execute(course_sql)
+    courses = cursor.fetchall()
+    for courseid in courses:
+        add_classinstance(courseid[0],1,semester,year)
 
+    #Now here we need to assign students to classes this semester
+
+    conn.commit()
+    conn.close()
     #end of semester
     #generate student to get random grade in classes he is taking
 
@@ -73,6 +95,7 @@ def assign_class():
     random start time, 
     duration 50 minutes MWF, 75 TTH
 """
+
 def add_classinstance(courseid, section, semester, year):
 
     conn = psycopg2.connect(
@@ -92,15 +115,17 @@ def add_classinstance(courseid, section, semester, year):
     crn = cursor.fetchone()[0] + 1
     
     #courseid
-    professor_sql = "SELECT staffid FROM staff WHERE jobid=0"
-    cursor.execute(professor_sql)
-    professorids = cursor.fetchall()
-    professorid = random.choice(professorids)[0]
-
+    professor_sql = "SELECT staffid,location FROM staff WHERE jobid=0 AND department IN (SELECT department from course WHERE courseid = %s)"
+    cursor.execute(professor_sql, [courseid,])
+    professors = cursor.fetchall()
+    professor = random.choice(professors)
+    print(professor)
+    professorid = professor[0]
+    location = professor[1]
     #section = 0
     #semester
     #year
-    location = "Rockwell"
+    
     starttimes = ["0800", "0900", "1000", "1100", "1300", "1400", "1500"]
     starttime  = random.choice(starttimes)
     duration   = random.choice([75, 50])
@@ -115,3 +140,30 @@ def add_classinstance(courseid, section, semester, year):
     conn.close()
 
     print('Class Instance added')
+
+
+"""
+We need to assign Student to a class that will be called from a simulation
+Set IN_PROGRESS
+"""
+def add_student_to_class(lnumber, crn):
+
+    conn = psycopg2.connect(
+    host="localhost",
+    database="college",
+    user="postgres",
+    password="password" # Assuming this is your password
+    )
+
+    cursor = conn.cursor()
+
+    studentclasssql = "INSERT INTO studenttoclassinstance VALUES (%s, %s, %s, %s)"
+
+    values = (lnumber, crn, 'IN_PROGRESS', None)
+
+    cursor.execute(studentclasssql, values)
+
+    conn.commit()
+    conn.close()
+
+

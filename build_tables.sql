@@ -93,6 +93,7 @@ create table staff (
     lastname            VARCHAR(250) NOT NULL,
     yearsworked         INT NOT NULL,
     tenure              BOOLEAN NOT NULL,
+    department          VARCHAR(250) NOT NULL,
     location            VARCHAR(250) NOT NULL,
     salary              INT NOT NULL,
     PRIMARY KEY (staffid),

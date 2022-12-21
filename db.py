@@ -76,11 +76,12 @@ def populate_db_tables():
     [cursor.execute(jobtype_sql, val) for val in values]
     
     
-    staff_sql = "INSERT INTO staff VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
-    values = [(0, 0, "Andrew", None, "Ng", 10, True, "Rockwell", 180000),
-                (1, 0, "John", "Howard", "Young", 8, True, "Hugel", 134000),
-                (2, 1, "Eddy", "Yin", "Taylor", 2, False, "Marquis Dining Hall", 45000),
-                (3, 2, "Martha", "Abigail", "Stewart", 4, False, "Skillman Library", 90000)]
+    staff_sql = "INSERT INTO staff VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    values = [(0, 0, "Andrew", None, "Ng", 10, True, "CS", "Rockwell", 180000),
+                (1, 0, "John", "Howard", "Young", 8, True, "MATH", "Hugel", 134000),
+                (2, 1, "Eddy", "Yin", "Taylor", 2, False, "Dining", "Marquis Dining Hall", 45000),
+                (3, 2, "Martha", "Abigail", "Stewart", 4, False, "Library", "Skillman Library", 90000),
+                (4, 0, "Ting", None, "Tam", 5, True, "ENGL", "Scott Hall", 100000)]
     [cursor.execute(staff_sql, val) for val in values]
     
     
@@ -252,8 +253,11 @@ def main():
     # Populate the database tables
     populate_db_tables()
 
+    #I do this to make sure after some changes the simulation methods still work
     simulation.add_student()
     simulation.add_classinstance(0, 1, 'FALL', 2022)
+    simulation.add_student_to_class(6,8)
+
 
     while(True):
         print("Enter a query to execute or 'exit' to quit")
