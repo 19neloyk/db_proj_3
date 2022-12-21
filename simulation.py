@@ -1,4 +1,5 @@
 from faker import Faker
+from db import make_db_query
 import psycopg2
 import random
 
@@ -165,5 +166,117 @@ def add_student_to_class(lnumber, crn):
 
     conn.commit()
     conn.close()
+
+
+# This will generate a valid id for a table
+def generate_id(table_name, column_name):
+    query = "SELECT max(%s) FROM %s;" % (column_name, table_name)
+    result = make_db_query(query)
+    if len(result) == 0:
+        return 0
+    return result[0][0]
+    
+
+def add_courses_and_majors():
+    courses = [
+        {
+            "course_name" : "Calculus I",
+            "course_department": "Mathematics",
+            "course_number" : "MATH101",
+            "course_description" : "Introduction to Calculus",
+        },
+        {
+            "course_name" : "Calculus 2",
+            "course_department": "Mathematics",
+            "course_number" : "MATH102",
+            "course_description" : "Introduction to Calculus 2",
+        },
+        {
+            "course_name" : "Theoretical Mathematics",
+            "course_department": "Mathematics",
+            "course_number" : "MATH103",
+            "course_description" : "Real Analysis and Calculus",
+        },
+        {
+            "course_name" : "Intro to Computer Science",
+            "course_department": "Computer Science",
+            "course_number" : "CS101",
+            "course_description" : "CS for beginners",
+        },
+        {
+            "course_name" : "Software Engineering",
+            "course_department": "Computer Science",
+            "course_number" : "CS102",
+            "course_description" : "Build stuff!",
+        },
+        {
+            "course_name" : "Reading and Writing",
+            "course_department": "English",
+            "course_number" : "ENGL101",
+            "course_description" : "Learn how to read and write!",
+        },
+        {
+            "course_number" : "ENGL102",
+            "course_department": "English",
+            "course_name" : "English Literature",
+            "course_description" : "Read Shakespeare",
+        },
+    ]
+    
+    all_majors_information = [
+                    {   
+                        "name": "Mathematics",
+                        "degrees" : ["BA", "BS"],
+                        "required_course_numbers" : ["MATH101", "MATH102", "MATH103"]
+                    },
+                    {
+                        "name": "Computer Science",
+                        "degrees" : ["BA", "BS"],
+                        "required_course_numbers" : ["MATH101", "CS101", "CS102"]
+                    },
+                    {
+                        "name": "English",
+                        "degrees" : ["BA"],
+                        "required_course_numbers" : ["ENGL101", "ENGL102"]
+                    }
+    ]
+    
+    # First add all the courses
+    for course in courses:
+        course_id = generate_id("course", "courseid")
+        course_name = course["course_name"]
+        course_department = course["course_department"]
+        course_number = course["course_number"]
+        course_description = course["course_description"]
+        
+        query_str = "INSERT INTO course VALUES (%s, %s, %s, %s, %s)" % course_id, course_name, course_department, course_number, course_description
+        make_db_query(query_str)
+    
+    
+    # Add all the majors and their requirements
+    for major_info in all_majors_information:
+        cur_major_id = generate_id("major", "majorid")
+        cur_major_name = major_info["name"]
+        cur_major_degrees = major_info["degrees"]
+        cur_major_requirement_numbers = major_info["required_course_numbers"]
+        
+        # Add the major (with variations for the degree)
+        for degree in cur_major_degrees:
+            query_str = "INSERT INTO major VALUES (%s, %s, %s)" % (cur_major_id, cur_major_name, degree)
+            make_db_query(query_str)
+        
+        # Now add the major requirements
+        for requirement_number in cur_major_requirement_numbers:
+            # First find the relevant courseid
+            query_str = "SELECT courseid FROM course WHERE coursenumber = %s" % requirement_number
+            result = make_db_query(query_str)
+            
+            # Now add that id, if it exists
+            if len(result) == 0:
+                print("Could not find course with name %s" % requirement_number)
+            else:
+                course_id = result[0][0]
+                query_str = "INSERT INTO majorrequirement VALUES (%s, %s)" % (cur_major_id, course_id)
+                make_db_query(query_str)
 
 

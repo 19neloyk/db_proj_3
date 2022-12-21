@@ -29,13 +29,6 @@ create table residencehall (
     PRIMARY KEY (hallid)
 );
 
-create table major (
-    majorid INT NOT NULL UNIQUE,
-    majorname VARCHAR(250) NOT NULL,
-    majordegree VARCHAR(250) NOT NULL,
-    PRIMARY KEY(majorid) 
-);
-
 create table student (
     lnumber             INT NOT NULL UNIQUE,
     hallid              INT NOT NULL,
@@ -56,12 +49,6 @@ create table student (
     FOREIGN KEY (hallid) REFERENCES residencehall(hallid)
 );
 
-create table studentmajor (
-    studentid INT NOT NULL,
-    majorid INT NOT NULL,
-    FOREIGN KEY (studentid) REFERENCES student(lnumber),
-    FOREIGN KEY (majorid) REFERENCES major(majorid)
-);
 create table course (
     courseid             INT NOT NULL UNIQUE, /* Arbitrary unique identifier */
     coursenumber         INT NOT NULL,   /* This represents the 320 in "CS320" */       
@@ -71,11 +58,25 @@ create table course (
     PRIMARY KEY (courseid)
 );
 
+create table major (
+    majorid INT NOT NULL UNIQUE,
+    majorname VARCHAR(250) NOT NULL,
+    majordegree VARCHAR(250) NOT NULL,
+    PRIMARY KEY(majorid) 
+);
+
 create table majorcoursereqs (
     majorid INT NOT NULL, 
     courseid INT NOT NULL,
     FOREIGN KEY (majorid) REFERENCES major(majorid),
     FOREIGN KEY (courseid) REFERENCES course(courseid)
+);
+
+create table studentmajor (
+    studentid INT NOT NULL,
+    majorid INT NOT NULL,
+    FOREIGN KEY (studentid) REFERENCES student(lnumber),
+    FOREIGN KEY (majorid) REFERENCES major(majorid)
 );
 
 create table jobtype (

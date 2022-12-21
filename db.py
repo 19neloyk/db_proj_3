@@ -229,7 +229,7 @@ def make_db_query(query):
     cursor.execute(query)
     if query.lower().startswith("select"):
         result = cursor.fetchall()
-        print(result)
+        return result
     else:
         print("Successfully executed query")
     
